@@ -1,4 +1,5 @@
 SampleApp::Application.routes.draw do
+  resources :user
 
   root to: 'static_pages#home'
 
