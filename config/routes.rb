@@ -1,9 +1,10 @@
 SampleApp::Application.routes.draw do
+
   resources :users
 
   root to: 'static_pages#home'
 
-  match '/signup',  to: 'user#new'
+  match '/signup',  to: 'users#new'
 
   match '/about',   to: 'static_pages#about'
   match '/help',    to: 'static_pages#help'
@@ -11,6 +12,9 @@ SampleApp::Application.routes.draw do
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
+
+  #match '/signup',  to: 'users#new'
+  #resources :users
 
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
