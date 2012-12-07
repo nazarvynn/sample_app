@@ -7,7 +7,8 @@ describe "User pages" do
   describe "index" do
     let(:user) { FactoryGirl.create(:user) }
 
-    before(:each) do
+    before do
+    #before(:each) do
       sign_in user
       visit users_path
 
@@ -41,7 +42,27 @@ describe "User pages" do
       end
     end
 
-  end
+    describe "delete links" do
+      it { should_not have_link("delete") }
+
+      describe "as an admin user" do
+        let(:admin) { FactoryGirl.create(:admin) }
+        before do
+          sign_in admin
+          visit users_path
+        end
+
+        it { should have_link("delete", :href => user_path(User.first)) }
+
+        it "should be able to delete another user" do
+          expect { click_link("delete") }.to change(User, :count).by(-1)
+        end
+
+        it { should_not have_link("delete", :href => user_path(admin)) }
+      end
+    end
+
+  end #index page
 
   describe "signup page" do
     before { visit signup_path }
@@ -83,11 +104,9 @@ describe "User pages" do
       end
     end
 
-
-
     it { should have_selector('h1',    :text => 'Sign Up') }
     it { should have_selector('title', :text => full_title('Sign Up')) }
-  end
+  end #signup page
 
   describe "profile page" do
     # Code to make a user variable
@@ -96,7 +115,7 @@ describe "User pages" do
 
     it { should have_selector('h1',     :text => user.name) }
     it { should have_selector('title',  :text => user.name) }
-  end
+  end #profile page
 
   describe "edit" do
     let(:user) { FactoryGirl.create(:user) }
@@ -135,6 +154,6 @@ describe "User pages" do
       specify { user.reload.name.should  == new_name }
       specify { user.reload.email.should == new_email }
     end
-  end
+  end #edit page
 
 end
